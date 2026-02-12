@@ -281,7 +281,7 @@
         }
 
         .desktop-sidebar {
-            width: 280px;
+            width: 310px;
             background: var(--premium-gradient);
             color: white;
             display: none;
@@ -290,6 +290,35 @@
             justify-content: space-between;
             box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
             z-index: 30;
+            /* --- TAMBAHAN UNTUK COLLAPSE --- */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden; 
+            white-space: nowrap; 
+        }
+
+        /* Class saat sidebar disembunyikan */
+        .desktop-sidebar.collapsed {
+            width: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- CSS TAMBAHAN UNTUK ANIMASI HEADER --- */
+
+        /* Keadaan Normal: Judul terlihat */
+        .sidebar-title-wrapper {
+            opacity: 1;
+            /* Transisi saat MUNCUL kembali (sedikit lebih lambat agar halus) */
+            transition: opacity 0.3s ease-in-out 0.1s; 
+        }
+
+        /* Keadaan Collapsed: Judul menghilang */
+        .desktop-sidebar.collapsed .sidebar-title-wrapper {
+            opacity: 0;
+            /* Transisi saat MENGHILANG (sangat cepat agar tidak terlihat terpotong) */
+            transition: opacity 0.1s ease-in-out;
         }
 
         .desktop-right-panel {
@@ -1283,12 +1312,13 @@
         <!-- === LEFT SIDEBAR (DESKTOP) === -->
         <div class="desktop-sidebar">
             <div>
-                <div class="flex items-center gap-3 mb-8">
-                    <div
-                        class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-slate-900 font-black text-xl shadow-lg">
-                        R</div>
-                    <div>
-                        <h1 class="font-bold text-lg leading-none tracking-widest">KALENDER INDONESIA</h1>
+                <div class="flex items-center gap-3 mb-8 overflow-hidden">
+                    <div class="w-10 h-10 flex-shrink-0 flex items-center justify-center">
+                        <img src="logo.png" alt="Logo BizDev" id="logoBizdev" class="w-full h-full object-contain">
+                    </div>
+                    
+                    <div class="sidebar-title-wrapper">
+                        <h1 class="font-bold text-lg leading-none tracking-wider whitespace-nowrap">KALENDER BIZDEV</h1>
                     </div>
                 </div>
 
@@ -1379,11 +1409,14 @@
         <main class="main-content">
 
             <div class="desktop-header-controls">
-                <div>
-                    <h2 class="text-3xl font-black text-slate-800 tracking-tight" id="desktopMonthYear">JANUARI 2026
-                    </h2>
-                    <p class="text-sm text-slate-500 font-medium tracking-widest uppercase mt-1" id="desktopHijri">1447
-                        HIJRIAH</p>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 transition cursor-pointer">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-800 tracking-tight" id="desktopMonthYear">JANUARI 2026</h2>
+                        <p class="text-sm text-slate-500 font-medium tracking-widest uppercase mt-1" id="desktopHijri">1447 HIJRIAH</p>
+                    </div>
                 </div>
                 <div class="flex gap-2">
                     <button onclick="changeMonth(-1)"
@@ -1465,7 +1498,7 @@
 
             <!-- Center: Branding -->
             <div class="flex items-center gap-2">
-                <span class="text-sm font-bold tracking-widest text-white uppercase">KALENDER INDONESIA</span>
+                <span class="text-sm font-bold tracking-widest text-white uppercase">KALENDER BIZDEV</span>
             </div>
 
             <!-- Right Button: Action -->
@@ -3308,6 +3341,14 @@
                     if (eX < sX - 70) navNotes(1);  // Swipe Kiri -> Next
                     if (eX > sX + 70) navNotes(-1); // Swipe Kanan -> Prev
                 }, { passive: true });
+            }
+        }
+
+        // Fungsi untuk buka-tutup sidebar
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.desktop-sidebar');
+            if(sidebar) {
+                sidebar.classList.toggle('collapsed');
             }
         }
 
